@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kyle Calnan | Portfolio</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: #f8f9fa;
+            overflow-x: hidden;
+        }
+        
+        header {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            padding: 100px 20px;
+            text-align: center;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        header h1 {
+            font-size: 3em;
+            margin-bottom: 10px;
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeInUp 1s forwards 0.3s;
+        }
+        
+        header p {
+            font-size: 1.4em;
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeInUp 1s forwards 0.6s;
+        }
+        
+        .scroll-hint {
+            position: absolute;
+            bottom: 30px;
+            opacity: 0;
+            animation: fadeInUp 1s forwards 0.9s, bounce 2s infinite 1.9s;
+        }
+        
+        .scroll-hint::after {
+            content: '↓';
+            font-size: 2em;
+            color: white;
+        }
+        
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateY(0);
+            }
+            40% {
+                transform: translateY(-10px);
+            }
+            60% {
+                transform: translateY(-5px);
+            }
+        }
+        
+        nav {
+            background: white;
+            padding: 15px 0;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        nav ul {
+            list-style: none;
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 30px;
+        }
+        
+        nav a {
+            color: #1e3c72;
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s;
+        }
+        
+        nav a:hover {
+            color: #2a5298;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        section {
+            background: white;
+            margin: 40px 0;
+            padding: 60px 40px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            opacity: 0;
+            transform: translateY(50px);
+            transition: opacity 0.8s, transform 0.8s;
+        }
+        
+        section.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        h2 {
+            color: #1e3c72;
+            font-size: 2.2em;
+            margin-bottom: 30px;
+            border-bottom: 3px solid #2a5298;
+            padding-bottom: 10px;
+        }
+        
+        .timeline-item {
+            margin: 40px 0;
+            padding-left: 30px;
+            border-left: 3px solid #2a5298;
+            opacity: 0;
+            transform: translateX(-30px);
+            transition: opacity 0.6s, transform 0.6s;
+        }
+        
+        section.visible .timeline-item {
+            opacity: 1;
+            transform: translateX(0);
+        }
+        
+        section.visible .timeline-item:nth-child(1) { transition-delay: 0.1s; }
+        section.visible .timeline-item:nth-child(2) { transition-delay: 0.2s; }
+        section.visible .timeline-item:nth-child(3) { transition-delay: 0.3s; }
+        section.visible .timeline-item:nth-child(4) { transition-delay: 0.4s; }
+        section.visible .timeline-item:nth-child(5) { transition-delay: 0.5s; }
+        section.visible .timeline-item:nth-child(6) { transition-delay: 0.6s; }
+        
+        .timeline-item h3 {
+            color: #2a5298;
+            font-size: 1.5em;
+            margin-bottom: 5px;
+        }
+        
+        .timeline-item .date {
+            color: #666;
+            font-style: italic;
+            margin-bottom: 10px;
+            font-size: 0.95em;
+        }
+        
+        .timeline-item p {
+            color: #555;
+            line-height: 1.8;
+            margin-bottom: 15px;
+        }
+        
+        .document-placeholder {
+            background: #f0f4f8;
+            border: 2px dashed #2a5298;
+            padding: 20px;
+            margin: 15px 0;
+            border-radius: 5px;
+            text-align: center;
+            color: #666;
+            font-style: italic;
+        }
+        
+        .about-content {
+            font-size: 1.1em;
+            line-height: 1.8;
+            color: #555;
+        }
+        
+        .project-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 30px;
+        }
+        
+        .project-card {
+            background: #f8f9fa;
+            padding: 30px;
+            border-radius: 8px;
+            border-left: 4px solid #2a5298;
+            opacity: 0;
+            transform: scale(0.9);
+            transition: opacity 0.6s, transform 0.6s, box-shadow 0.3s;
+        }
+        
+        section.visible .project-card {
+            opacity: 1;
+            transform: scale(1);
+        }
+        
+        section.visible .project-card:nth-child(1) { transition-delay: 0.1s; }
+        section.visible .project-card:nth-child(2) { transition-delay: 0.2s; }
+        section.visible .project-card:nth-child(3) { transition-delay: 0.3s; }
+        section.visible .project-card:nth-child(4) { transition-delay: 0.4s; }
+        
+        .project-card:hover {
+            box-shadow: 0 5px 20px rgba(0,0,0,0.15);
+        }
+        
+        .project-card h3 {
+            color: #1e3c72;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+        }
+        
+        .project-card p {
+            color: #555;
+            line-height: 1.7;
+        }
+        
+        footer {
+            background: #1e3c72;
+            color: white;
+            text-align: center;
+            padding: 40px 20px;
+            margin-top: 60px;
+        }
+        
+        .contact-info {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            flex-wrap: wrap;
+            margin-top: 20px;
+            font-size: 1.1em;
+        }
+        
+        .contact-info a {
+            color: white;
+            text-decoration: none;
+            transition: opacity 0.3s;
+        }
+        
+        .contact-info a:hover {
+            opacity: 0.7;
+        }
+        
+        .doc-button {
+            display: inline-block;
+            background: #2a5298;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: background 0.3s, transform 0.2s;
+        }
+        
+        .doc-button:hover {
+            background: #1e3c72;
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Kyle Calnan</h1>
+        <p>Investment Analyst | Master's in Quantitative Finance & Economics</p>
+        <div class="scroll-hint"></div>
+    </header>
+    
+    <nav>
+        <ul>
+            <li><a href="#about">About</a></li>
+            <li><a href="#experience">Experience</a></li>
+            <li><a href="#contact">Contact</a></li>
+        </ul>
+    </nav>
+    
+    <div class="container">
+        <section id="about">
+            <h2>About Me</h2>
+            <div class="about-content">
+                <p>
+                    I grew up in Houston, Texas, playing baseball while developing an early interest in financial markets as I approached college. I attended Texas State University where I majored in Finance and was able to fully expand on this passion through the university's selective Student Managed Investment Fund (SMIF). That experience managing real capital solidified my goal of becoming a part of this industry.
+                </p>
+            </div>
+        </section>
+        
+        <section id="experience">
+            <h2>Experience & Education</h2>
+            
+            <div class="timeline-item">
+                <h3>Texas State University - Master of Science in Quantitative Finance & Economics</h3>
+                <div class="date">Completed December 2025 | San Marcos, Texas</div>
+                <p>
+                    Completed my graduate studies, refining my programming skills and furthering my education in quantitative finance. Developed advanced analytical capabilities in financial modeling, econometrics, portfolio theory, and risk management.
+                </p>
+            </div>
+            
+            <div class="timeline-item">
+                <h3>Teacher Retirement System of Texas - Public Markets Intern</h3>
+                <div class="date">June 2025 – August 2025 | Austin, Texas</div>
+                <p>
+                    Rotated across three Public Markets teams at the sixth-largest U.S. pension fund (~$230B AUM), gaining exposure to institutional asset allocation and buyside investment analysis.
+                </p>
+                <p>
+                    <strong>Internally Managed Equities:</strong> Conducted fundamental valuation analysis to support launch of European value strategy; produced comprehensive equity research reports utilizing multiple valuation methodologies.
+                </p>
+                <p>
+                    <strong>Externally Managed Equities:</strong> Led due diligence calls and evaluated emerging equity long/short hedge funds; performed quantitative and qualitative analysis of fund strategies.
+                </p>
+                <p>
+                    <strong>Special Opportunities:</strong> Conducted initial due diligence for a GP stakes fund opportunity and provided comprehensive market research on the private secondaries market.
+                </p>
+            </div>
+            
+            <div class="timeline-item">
+                <h3>CFA Institute Research Challenge - Team Lead</h3>
+                <div class="date">December 2024 – March 2025 | Texas Regional Finalist</div>
+                <p>
+                    Led team to the Texas Regional Finals, competing against top universities including Texas A&M, Texas Tech, Rice, and UT Austin. Produced institutional-quality equity research report with comprehensive financial modeling, valuation analysis, and investment recommendations. Presented findings to panel of CFA charterholders.
+                </p>
+                <div style="display: flex; gap: 15px; margin-top: 15px; flex-wrap: wrap;">
+                    <a href="https://drive.google.com/file/d/1BIY55xhK3reIaFYwH0ozbG55WGy5IXy6/view?usp=sharing" target="_blank" class="doc-button">View Research Report (PDF)</a>
+                    <a href="https://docs.google.com/presentation/d/1P_XcIGFo-X3O6qe5TXvrlg0uNicsL8_a/edit?usp=sharing&ouid=110701569513656025852&rtpof=true&sd=true" target="_blank" class="doc-button">View Presentation (Slides)</a>
+                </div>
+            </div>
+            
+            <div class="timeline-item">
+                <h3>Texas State University - Master of Science in Quantitative Finance & Economics</h3>
+                <div class="date">August 2024 – December 2025 | San Marcos, Texas</div>
+                <p>
+                    Started my graduate program to refine my programming skills and further my education in quantitative finance, building on the foundation established through SMIF and undergraduate studies.
+                </p>
+            </div>
+            
+            <div class="timeline-item">
+                <h3>Texas State University - Bachelor of Business Administration in Finance</h3>
+                <div class="date">Graduated May 2024 | San Marcos, Texas</div>
+                <p>
+                    Completed undergraduate degree with foundational knowledge in finance, investments, and financial analysis. Actively participated in the Student Managed Investment Fund and other competitive academic programs.
+                </p>
+            </div>
+            
+            <div class="timeline-item">
+                <h3>McCoy College Endowment Fund - Domestic Equities Portfolio Manager</h3>
+                <div class="date">January 2024 – May 2024 | San Marcos, Texas</div>
+                <p>
+                    Elected by peers to serve as Domestic Equities Portfolio Manager on the Investment Committee for the $1.6M fund. This role taught me how active management, portfolio construction, and asset allocation work together to offer diversification, limit volatility, and aim to generate alpha through security selection and position sizing.
+                </p>
+                <p>
+                    Led equity portfolio strategy and guided first-semester SMIF students in valuation methodologies and investment analysis. Also managed fixed income portfolio strategy, employing Treasuries, investment-grade corporates, and alternative instruments such as catastrophe bonds to enhance risk-adjusted returns.
+                </p>
+                <div style="margin-top: 15px;">
+                    <a href="https://docs.google.com/presentation/d/1GOTxrr1EdFGwr0gZB7ryL7anDLo7Be5u/edit?usp=sharing&ouid=110701569513656025852&rtpof=true&sd=true" target="_blank" class="doc-button">View Portfolio Presentation</a>
+                </div>
+            </div>
+            
+            <div class="timeline-item">
+                <h3>McCoy College Endowment Fund - Equity Analyst</h3>
+                <div class="date">August 2023 – January 2024 | San Marcos, Texas</div>
+                <p>
+                    After my internship at The Noble Group, I was selected for the 12-member Student Managed Investment Fund where I covered the Financials and Energy sectors. This experience taught me the importance of active management and security selection, and how individual stock picks fit together within a broader portfolio strategy.
+                </p>
+                <p>
+                    Developed equity valuation models utilizing comparable company analysis, precedent transactions, and DCF methodologies. Presented investment theses to the committee, learning to articulate and defend investment recommendations.
+                </p>
+                <div style="display: flex; gap: 15px; margin-top: 15px; flex-wrap: wrap;">
+                    <a href="https://docs.google.com/presentation/d/19ihaKgV1Lp1yofspEct52n7mEMmaG-Hc/edit?usp=sharing&ouid=110701569513656025852&rtpof=true&sd=true" target="_blank" class="doc-button">IT Sector Analysis</a>
+                    <a href="https://docs.google.com/presentation/d/1NQapN3T9AJdTWazTHpaXOxwUc-3B-9gs/edit?usp=sharing&ouid=110701569513656025852&rtpof=true&sd=true" target="_blank" class="doc-button">Fixed Income Analysis</a>
+                    <a href="https://drive.google.com/file/d/17DeaXAAchPVw09kyPNUnOK0ozBJg51Qj/view?usp=sharing" target="_blank" class="doc-button">Energy Sector Report (PDF)</a>
+                </div>
+            </div>
+            
+            <div class="timeline-item">
+                <h3>The Noble Group - Wealth Management Summer Intern</h3>
+                <div class="date">June 2023 – August 2023 | Sugar Land, Texas</div>
+                <p>
+                    Gained initial exposure to the wealth management industry, assisting a team of advisors overseeing $1.8B AUM. Led initiative to transition 401K advisory participants to wealth management, successfully adding $10M to the firm's AUM.
+                </p>
+            </div>
+        </section>
+        
+        <section id="contact">
+            <h2>Get In Touch</h2>
+            <p style="text-align: center; font-size: 1.1em; color: #555; margin-bottom: 20px;">
+                I'm always interested in connecting with professionals in the investment community.
+            </p>
+            <div style="text-align: center; margin-bottom: 25px;">
+                <a href="https://drive.google.com/file/d/1mcoT9ATTle9-LkjlR_w8EkBQhIJNMn2P/view?usp=sharing" target="_blank" class="doc-button">Download Resume (PDF)</a>
+            </div>
+            <div class="contact-info">
+                <a href="mailto:krc209@txstate.edu">krc209@txstate.edu</a>
+                <a href="https://linkedin.com/in/kylecalnan" target="_blank">LinkedIn</a>
+                <a href="tel:+18326031646">832-603-1646</a>
+            </div>
+        </section>
+    </div>
+    
+    <footer>
+        <p>&copy; 2025 Kyle Calnan. All rights reserved.</p>
+    </footer>
+    
+    <script>
+        // Smooth scroll animation on scroll
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -100px 0px'
+        };
+        
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+        
+        document.querySelectorAll('section').forEach(section => {
+            observer.observe(section);
+        });
+        
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            });
+        });
+    </script>
+</body>
+</html>
